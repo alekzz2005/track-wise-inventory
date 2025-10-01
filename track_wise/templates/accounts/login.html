@@ -19,10 +19,18 @@
             
             {% if messages %}
                 {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }}">
+                    <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-{{ message.tags }}{% endif %}">
                         {{ message }}
                     </div>
                 {% endfor %}
+            {% endif %}
+            
+            {% if form.non_field_errors %}
+                <div class="alert alert-error">
+                    {% for error in form.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
             {% endif %}
             
             <form method="post" action="{% url 'login' %}">
@@ -32,7 +40,11 @@
                     <label class="form-label" for="id_username">Username</label>
                     {{ form.username }}
                     {% if form.username.errors %}
-                        <div class="errorlist">{{ form.username.errors }}</div>
+                        <div class="errorlist">
+                            {% for error in form.username.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
                     {% endif %}
                 </div>
                 
@@ -40,7 +52,11 @@
                     <label class="form-label" for="id_password">Password</label>
                     {{ form.password }}
                     {% if form.password.errors %}
-                        <div class="errorlist">{{ form.password.errors }}</div>
+                        <div class="errorlist">
+                            {% for error in form.password.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
                     {% endif %}
                 </div>
                 

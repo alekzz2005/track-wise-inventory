@@ -5,14 +5,22 @@ from django.contrib import messages
 from .forms import CustomUserCreationForm, CustomAuthenticationForm
 
 def register_view(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+        
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, 'Account created successfully! Welcome to TrackWise.')
-            return redirect('dashboard')
+            try:
+                user = form.save()
+                login(request, user)
+                messages.success(request, 'Account created successfully! Welcome to TrackWise.')
+                return redirect('dashboard')
+            except Exception as e:
+                messages.error(request, f'Error creating account: {str(e)}')
         else:
+            # Debug form errors
+            print("Form errors:", form.errors)
             messages.error(request, 'Please correct the errors below.')
     else:
         form = CustomUserCreationForm()
@@ -48,4 +56,12 @@ def logout_view(request):
 
 @login_required
 def dashboard_view(request):
+    # Get user profile or create one if it doesn't exist
+    try:
+        profile = request.user.userprofile
+    except UserProfile.DoesNotExist:
+        # Create a default profile if it doesn't exist
+        from .models import UserProfile
+        profile = UserProfile.objects.create(user=request.user, role='staff')
+    
     return render(request, 'accounts/dashboard.html')
