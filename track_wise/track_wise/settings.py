@@ -130,3 +130,21 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Authentication settings
+LOGIN_REDIRECT_URL = 'dashboard'  # You'll create this later
+LOGOUT_REDIRECT_URL = 'login'
+LOGIN_URL = 'login'
+
+# Custom user model (optional but recommended for future extensions)
+AUTH_USER_MODEL = 'auth.User'
+
+# Session settings
+SESSION_COOKIE_AGE = 1209600  # 2 weeks in seconds
+SESSION_SAVE_EVERY_REQUEST = True
+
+# Security settings (for production)
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
