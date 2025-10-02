@@ -22,13 +22,16 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2', 'role']
+        fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2']
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             if field_name not in ['role']:
-                field.widget.attrs.update({'class': 'form-control'})
+                if hasattr(field, 'widget') and hasattr(field.widget, 'attrs'):
+                    field.widget.attrs.update({'class': 'form-control'})
+            
+            # Add placeholders for specific fields
             if field_name == 'username':
                 field.widget.attrs.update({'placeholder': 'Choose a username'})
             elif field_name == 'password1':
@@ -44,7 +47,7 @@ class CustomUserCreationForm(UserCreationForm):
         
         if commit:
             user.save()
-            # Create user profile
+            # Create user profile - only one place creates it
             UserProfile.objects.create(
                 user=user,
                 role=self.cleaned_data['role']

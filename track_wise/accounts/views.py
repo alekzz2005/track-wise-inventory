@@ -3,8 +3,12 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import CustomUserCreationForm, CustomAuthenticationForm
+from .models import UserProfile
 
 def register_view(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+        
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
@@ -48,4 +52,11 @@ def logout_view(request):
 
 @login_required
 def dashboard_view(request):
+    # Ensure user has a profile (for existing users who might not have one)
+    try:
+        profile = request.user.userprofile
+    except UserProfile.DoesNotExist:
+        # Create a default profile if it doesn't exist (for users created before this system)
+        profile = UserProfile.objects.create(user=request.user, role='staff')
+    
     return render(request, 'accounts/dashboard.html')
