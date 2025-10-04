@@ -142,6 +142,17 @@ body {
     color: var(--primary-color);
 }
 
+.btn-outline-logout {
+    background: transparent;
+    border: 2px solid var(--border-color);
+    color: var(--border-color);
+}
+
+.btn-outline-logout:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
 /* Alert Messages */
 .alert {
     padding: 0.75rem 1rem;
