@@ -555,7 +555,9 @@ body {
 
 /* Form improvements */
 .form-control[type="number"] {
+    appearance: none;
     -moz-appearance: textfield;
+    -webkit-appearance: none;
 }
 
 .form-control[type="number"]::-webkit-outer-spin-button,
@@ -580,4 +582,3 @@ body {
         margin-left: 0;
     }
 }
-
