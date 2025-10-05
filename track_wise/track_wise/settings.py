@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
+    'inventory',
 ]
 
 MIDDLEWARE = [
@@ -135,6 +136,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'dashboard'  # You'll create this later
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Custom user model (optional but recommended for future extensions)
 AUTH_USER_MODEL = 'auth.User'
